@@ -161,7 +161,7 @@ const demoResult = {
       { day: "Day 2", focus: "Project positioning", action: "Rewrite project summaries around systems, tradeoffs, and deployment rather than just languages used." },
       { day: "Day 3", focus: "Behavioral stories", action: "Prepare two concise stories on shipping work, one on QA judgment, and one on learning quickly." },
       { day: "Day 4", focus: "Technical interview prep", action: "Review data structures fundamentals plus one backend request-response flow you can explain clearly." },
-      { day: "Day 5", focus: "AI product angle", action: "Practice explaining how this OpenAI-powered app handles validation, structured output, and deployment." },
+      { day: "Day 5", focus: "AI product angle", action: "Practice explaining how this Groq-powered app handles validation, structured output, and deployment." },
       { day: "Day 6", focus: "Company alignment", action: "Map your strongest experiences directly to the company’s product culture and job requirements." },
       { day: "Day 7", focus: "Mock screen", action: "Run a 20-minute mock recruiter screen using the generated pitch and interview questions." }
     ]
@@ -396,7 +396,7 @@ form.addEventListener("submit", async (event) => {
     setStatus("Live Analysis", "success");
   } catch (error) {
     if (isGithubPages) {
-      runDemo("This GitHub Pages preview cannot run the serverless API route. Demo output is shown here; deploy the repo on Vercel with OPENAI_API_KEY for live analysis.", false);
+      runDemo("This GitHub Pages preview cannot run the serverless API route. Demo output is shown here; deploy the repo on Vercel with GROQ_API_KEY for live analysis.", false);
     } else {
       setStatus("Error", "error");
       showBanner(error.message || "Unable to complete the analysis.");
@@ -414,5 +414,5 @@ demoButton.addEventListener("click", () => {
 clearButton.addEventListener("click", clearForm);
 
 if (isGithubPages) {
-  runDemo("This page is running on GitHub Pages, so it loads a demo analysis by default. The same UI uses the live OpenAI backend when deployed on Vercel.");
+  runDemo("This page is running on GitHub Pages, so it loads a demo analysis by default. The same UI uses the live Groq backend when deployed on Vercel.");
 }

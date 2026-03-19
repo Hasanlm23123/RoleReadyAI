@@ -39,10 +39,10 @@
         <p class="hero-text">
           RoleReady AI scores candidate fit, surfaces strengths and gaps, rewrites bullets, drafts a short recruiter
           pitch, and builds interview prep questions from the same inputs. It is designed as a Vercel-ready full-stack
-          app with a static frontend and a server-side OpenAI route.
+          app with a static frontend and a server-side Groq route.
         </p>
         <div class="hero-chips">
-          <span class="chip">OpenAI Responses API</span>
+          <span class="chip">Groq Chat API</span>
           <span class="chip">Structured JSON Output</span>
           <span class="chip">Serverless Backend</span>
           <span class="chip">Recruiter-Facing UX</span>
@@ -125,7 +125,7 @@
 
         <div class="privacy-note">
           <strong>Privacy note:</strong> On the Vercel deployment, analysis runs server-side through an environment
-          variable and the request is sent with response storage disabled.
+          variable so the provider key is never exposed in the browser.
         </div>
       </section>
 

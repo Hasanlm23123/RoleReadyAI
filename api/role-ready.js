@@ -1,4 +1,4 @@
-const MODEL = "gpt-5.4-mini";
+const MODEL = "openai/gpt-oss-20b";
 const MAX_FIELD_LENGTH = 14000;
 
 const schema = {
@@ -134,27 +134,19 @@ const validatePayload = ({ resumeText, jobDescription }) => {
   return "";
 };
 
-const buildPrompt = ({ jobTitle, companyName, focusMode, candidateLevel, resumeText, jobDescription }) => {
+const buildMessages = ({ jobTitle, companyName, focusMode, candidateLevel, resumeText, jobDescription }) => {
   const safeJobTitle = jobTitle || "Target role not provided";
   const safeCompanyName = companyName || "Target company not provided";
 
   return [
     {
       role: "system",
-      content: [
-        {
-          type: "input_text",
-          text:
-            "You are RoleReady AI, a precise recruiting and career analysis assistant. Ground every conclusion in the supplied resume and job description. Do not invent experience, metrics, or technologies. Prefer direct, useful recruiting language over hype. Make the rewritten bullets stronger, but do not fabricate facts. Return only structured JSON that matches the provided schema."
-        }
-      ]
+      content:
+        "You are RoleReady AI, a precise recruiting and career analysis assistant. Ground every conclusion in the supplied resume and job description. Do not invent experience, metrics, or technologies. Prefer direct, useful recruiting language over hype. Make the rewritten bullets stronger, but do not fabricate facts. Return only structured JSON that matches the provided schema."
     },
     {
       role: "user",
-      content: [
-        {
-          type: "input_text",
-          text: `Analyze this candidate for the role below.
+      content: `Analyze this candidate for the role below.
 
 Focus mode: ${focusMode}
 Candidate level: ${candidateLevel}
@@ -174,8 +166,6 @@ Instructions:
 - Generate exactly 3 likely interview questions with concise talking points.
 - Generate exactly 7 prep plan steps, one for each day.
 - If company information is missing, still analyze the role and note that the company field was not provided.`
-        }
-      ]
     }
   ];
 };
@@ -187,8 +177,8 @@ module.exports = async (req, res) => {
     return res.status(405).json({ error: "Method not allowed." });
   }
 
-  if (!process.env.OPENAI_API_KEY) {
-    return res.status(500).json({ error: "Missing OPENAI_API_KEY in the deployment environment." });
+  if (!process.env.GROQ_API_KEY) {
+    return res.status(500).json({ error: "Missing GROQ_API_KEY in the deployment environment." });
   }
 
   const parsed = parseBody(req.body);
@@ -207,20 +197,20 @@ module.exports = async (req, res) => {
   }
 
   try {
-    const response = await fetch("https://api.openai.com/v1/responses", {
+    const response = await fetch("https://api.groq.com/openai/v1/chat/completions", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
-        Authorization: `Bearer ${process.env.OPENAI_API_KEY}`
+        Authorization: `Bearer ${process.env.GROQ_API_KEY}`
       },
       body: JSON.stringify({
         model: MODEL,
-        store: false,
-        max_output_tokens: 1800,
-        input: buildPrompt(payload),
-        text: {
-          format: {
-            type: "json_schema",
+        max_completion_tokens: 1800,
+        temperature: 0.2,
+        messages: buildMessages(payload),
+        response_format: {
+          type: "json_schema",
+          json_schema: {
             name: "role_ready_analysis",
             strict: true,
             schema
@@ -234,17 +224,18 @@ module.exports = async (req, res) => {
       const errorMessage =
         data && data.error && data.error.message
           ? data.error.message
-          : "OpenAI did not return a successful response for the analysis request.";
+          : "Groq did not return a successful response for the analysis request.";
       return res.status(response.status).json({ error: errorMessage });
     }
 
-    if (!data.output_text) {
+    const content = data?.choices?.[0]?.message?.content;
+    if (!content) {
       return res.status(502).json({ error: "The API response did not include structured output text." });
     }
 
     let analysis;
     try {
-      analysis = JSON.parse(data.output_text);
+      analysis = JSON.parse(content);
     } catch {
       return res.status(502).json({
         error: "The API returned output text, but it was not valid JSON."
