@@ -37,138 +37,137 @@ const output = {
 const isGithubPages = window.location.hostname.endsWith("github.io");
 
 const demoInputs = {
-  jobTitle: "Software Engineer Intern",
-  companyName: "Ramp",
+  jobTitle: "Associate Product Engineer",
+  companyName: "Northstar Health",
   focusMode: "recruiter",
-  candidateLevel: "internship",
-  resumeText: `Labib Hasan
-Virginia Tech Computer Science major with a Cyber Security minor graduating in December 2026.
+  candidateLevel: "new-grad",
+  resumeText: `Maya Carter
+University of Maryland Information Science student graduating in May 2026.
 
 Experience
-- Software Development Intern, SavvyTechGirl, Summer 2025
-  Built production-facing pages, implemented UI updates, and improved delivery quality in a fast-moving environment.
-- AI Intern, Outlier AI, June 2024 to January 2025
-  Reviewed large volumes of code and technical responses for correctness, quality, and clarity.
-- QA and UX Intern, IDoxSolutions, 2021 and 2022
-  Executed UI testing, API validation, and QA workflows across product releases.
+- Product Engineering Intern, Harbor Atlas, Summer 2025
+  Built internal dashboards in React, shipped account workflow updates, and partnered with design to reduce QA churn before release.
+- Software QA Intern, Finch Systems, 2024
+  Wrote regression test cases, validated REST endpoints in Postman, and documented edge cases for the engineering team.
+- Peer Tech Coach, Campus Learning Lab, 2023 to Present
+  Helped students debug web assignments, explain JavaScript fundamentals, and break down technical concepts clearly.
 
 Projects
-- Browser-playable Python Dodge Game with collision logic, scaling difficulty, and persistent scoring.
-- Browser-playable Python Space Shooter with hull tracking, level progression, and power-up mechanics.
-- Palindrome tutorial video explaining Python logic clearly for beginner audiences.
+- ShiftPilot, a full-stack scheduling app with role-based routing, Supabase auth, and automated reminder emails.
+- SignalBoard, a real-time analytics dashboard with charting, filters, and responsive mobile views.
+- Browser survival game with wave spawning, collision logic, and persistent high-score tracking.
 
 Skills
-Python, Java, JavaScript, TypeScript, React, Svelte, SQL, Docker, AWS EC2, Postman, GitHub, Azure DevOps, Linux`,
-  jobDescription: `Ramp is hiring a Software Engineer Intern to work across product engineering teams. Interns build
-production features, improve internal tools, and ship high-quality code in collaboration with engineers, product, and
-design. Strong candidates show ownership, learn quickly, communicate clearly, and are comfortable with modern backend
-or frontend development. Bonus points for experience with APIs, testing, data-driven product work, and AI-powered
-developer workflows.`,
+JavaScript, TypeScript, React, Node.js, Supabase, PostgreSQL, HTML, CSS, Python, Postman, Git, Figma`,
+  jobDescription: `Northstar Health is hiring an Associate Product Engineer to build patient onboarding flows, internal
+tools, and analytics surfaces used by operations teams. The role works across React interfaces, API integrations,
+debugging, and SQL-backed product features. Strong candidates show ownership, communicate well with design and product,
+and can ship polished user-facing work while improving reliability behind the scenes.`,
 };
 
 const demoResult = {
   analysis: {
-    role_title: "Software Engineer Intern",
-    company_name: "Ramp",
-    fit_score: 84,
-    decision: "Competitive early-career candidate with strong practical range",
-    summary: "Labib reads as a credible internship candidate because the profile combines shipped UI work, QA depth, API validation, and recent AI-focused evaluation work. The strongest story is not raw years of experience, but the combination of delivery, testing discipline, and communication across different technical contexts.",
-    candidate_pitch: "Virginia Tech CS student with internship experience across software delivery, QA automation, API validation, and AI-assisted code review. Best positioned as an engineer who can ramp quickly, communicate clearly, and contribute across product quality and implementation work.",
-    recruiter_take: "The profile stands out when framed around shipping production pages, reviewing code quality at scale, and building interactive side projects that show ownership outside classwork. The main weakness is that the resume should make technical impact more measurable and tie projects more directly to engineering decisions.",
+    role_title: "Associate Product Engineer",
+    company_name: "Northstar Health",
+    fit_score: 82,
+    decision: "Strong new-grad candidate with product and execution signal",
+    summary: "Maya reads like a practical early-career product engineer because the profile combines shipped UI work, QA discipline, technical communication, and one clear full-stack build. The strongest angle is not just coursework, but the pattern of turning user needs into polished workflows and backing that with testing awareness.",
+    candidate_pitch: "Early-career product engineer with experience shipping React dashboards, validating APIs, and supporting real users through debugging and coaching. Best positioned as someone who can contribute quickly on frontend-heavy product work while growing into deeper backend ownership.",
+    recruiter_take: "The profile stands out when framed around product delivery, release quality, and user empathy. The biggest improvement area is making backend and data work feel more concrete by attaching metrics, production context, and end-to-end system details to the strongest project bullets.",
     strengths: [
       {
-        title: "Real internship signal",
-        detail: "Multiple internships reduce the risk that the resume reads like classroom-only experience."
+        title: "Product-shipping internship experience",
+        detail: "The Harbor Atlas internship adds real delivery signal and shows familiarity with product, design, and release pressure."
       },
       {
-        title: "Cross-functional software exposure",
-        detail: "SavvyTechGirl, Outlier AI, and IDoxSolutions together suggest product delivery, quality assurance, and technical review experience."
+        title: "Frontend plus QA range",
+        detail: "React delivery paired with API validation suggests a candidate who can both build user flows and catch reliability issues."
       },
       {
-        title: "Strong project presentation",
-        detail: "The playable Python games show initiative, user-facing thinking, and an ability to turn small codebases into polished demos."
+        title: "Good user empathy and communication",
+        detail: "The tech coach role supports the idea that Maya can explain technical work clearly and think about how users experience a product."
       },
       {
-        title: "Communication advantage",
-        detail: "The tutorial-style project and code review work support the idea that Labib can explain technical decisions clearly."
+        title: "Projects show initiative beyond classwork",
+        detail: "A full-stack scheduling app plus a real-time dashboard give the resume more depth than a generic student project list."
       }
     ],
     gaps: [
       {
-        title: "Impact metrics are light",
-        detail: "Several bullets describe responsibilities but not measurable outcomes, quality improvements, or scope.",
-        fix: "Add numbers around pages shipped, bugs found, tests written, review volume, or time saved."
+        title: "Impact metrics are still thin",
+        detail: "Several bullets describe contributions clearly, but they do not quantify release scope, bug reduction, or usage impact.",
+        fix: "Add metrics around dashboard usage, bugs caught, test coverage, or time saved for the team."
       },
       {
-        title: "Backend ownership is implied more than proven",
-        detail: "The resume references APIs and validation, but it does not yet show one strong end-to-end full-stack build.",
-        fix: "Lead with an API-powered app and explain the request flow, data validation, and deployment path."
+        title: "Backend ownership needs to read stronger",
+        detail: "The resume references APIs and SQL, but the current bullets still lean heavier on frontend execution than system ownership.",
+        fix: "Make ShiftPilot the anchor project and explain the auth flow, database design, and deployment choices."
       },
       {
-        title: "Project framing is still skill-first",
-        detail: "The games are interesting, but they should read like systems design examples rather than just student practice.",
-        fix: "Highlight mechanics, state management, progression systems, and deployment choices."
+        title: "Debugging under production pressure is implied, not proven",
+        detail: "The QA and internship work suggest real debugging exposure, but the resume does not yet tell one specific story of diagnosing a problem end to end.",
+        fix: "Prepare a concise example about finding a release blocker, tracing the issue, and communicating the fix."
       }
     ],
     rewritten_bullets: [
       {
-        original: "Built production-facing pages and implemented UI updates at SavvyTechGirl.",
-        improved: "Built and shipped production-facing web pages at SavvyTechGirl, translating product requirements into polished UI updates that improved release readiness and presentation quality.",
-        why_it_works: "This version sounds closer to shipped software work and makes the ownership clearer."
+        original: "Built internal dashboards in React and shipped workflow updates at Harbor Atlas.",
+        improved: "Built and shipped internal React dashboards and account workflow updates at Harbor Atlas, partnering with design to tighten UI quality and reduce release churn before launch.",
+        why_it_works: "This version makes the ownership, collaboration, and delivery impact feel more concrete."
       },
       {
-        original: "Reviewed code and technical responses at Outlier AI.",
-        improved: "Reviewed high-volume code and technical responses at Outlier AI, identifying correctness issues and improving the clarity of model-generated engineering outputs.",
-        why_it_works: "This creates a stronger link to AI workflows and technical quality judgment."
+        original: "Validated REST endpoints and wrote regression tests at Finch Systems.",
+        improved: "Validated REST endpoints and wrote regression coverage at Finch Systems, documenting release-blocking edge cases and improving confidence ahead of engineering handoff.",
+        why_it_works: "This reframes QA work as a software quality contribution rather than a generic internship task."
       },
       {
-        original: "Built a Python space shooter project.",
-        improved: "Built and deployed a browser-playable space shooter from an original Python project, adding hull tracking, level progression, power-ups, and a more complete gameplay state model.",
-        why_it_works: "This reframes the project as a systems build with implementation depth."
+        original: "Built ShiftPilot, a scheduling app with authentication and reminder emails.",
+        improved: "Built ShiftPilot, a full-stack scheduling app with role-based routing, Supabase authentication, PostgreSQL-backed scheduling data, and automated reminder emails for shift updates.",
+        why_it_works: "This turns the project into a stronger full-stack systems example with clear technical depth."
       }
     ],
     interview_questions: [
       {
-        question: "Tell me about a time you had to improve software quality before release.",
-        why_it_matters: "The resume has strong QA and review signal, so interviewers will test whether that experience translates into engineering judgment.",
+        question: "Tell me about a time you shipped a product workflow with input from design or product.",
+        why_it_matters: "This role values product collaboration, so interviewers will want evidence that Maya can build with user and stakeholder context in mind.",
         talking_points: [
-          "Describe the release context and what could have gone wrong.",
-          "Explain the test or review process you used.",
-          "Show how you communicated findings and what changed afterward."
+          "Describe the workflow, who you partnered with, and what the user needed.",
+          "Explain the implementation decisions you made in the interface.",
+          "Close with how you validated the final result before release."
         ]
       },
       {
-        question: "What did you learn from building your playable game projects beyond Python syntax?",
-        why_it_matters: "A good answer turns student projects into evidence of design thinking and engineering maturity.",
+        question: "What did you learn from validating APIs and writing regression coverage as an intern?",
+        why_it_matters: "The QA experience is a real differentiator, but only if Maya can connect it to engineering judgment and release quality.",
         talking_points: [
-          "Discuss event loops, collision detection, and game-state management.",
-          "Explain how you iterated the mechanics to make the experience feel complete.",
-          "Connect the project work to user-facing product thinking."
+          "Discuss how you identified edge cases and structured test coverage.",
+          "Explain how those checks reduced release risk for the team.",
+          "Connect that experience to writing more reliable product code."
         ]
       },
       {
-        question: "Why are you interested in a product engineering internship at Ramp?",
-        why_it_matters: "The role values ownership and shipping; you need a crisp story that connects your past work to that environment.",
+        question: "How would you walk through the architecture of ShiftPilot in an interview?",
+        why_it_matters: "A strong answer can turn the best project into proof of full-stack thinking instead of a resume bullet with buzzwords.",
         talking_points: [
-          "Mention fast product iteration and real business impact.",
-          "Tie your mix of development and quality experience to shipping reliable features.",
-          "Show interest in modern AI-assisted engineering workflows."
+          "Start from the user flow and explain authentication and roles.",
+          "Describe where data is stored, fetched, and validated.",
+          "Mention one tradeoff you would revisit in the next iteration."
         ]
       }
     ],
     prep_plan: [
-      { day: "Day 1", focus: "Resume tightening", action: "Replace weak responsibility bullets with measurable delivery and quality outcomes." },
-      { day: "Day 2", focus: "Project positioning", action: "Rewrite project summaries around systems, tradeoffs, and deployment rather than just languages used." },
-      { day: "Day 3", focus: "Behavioral stories", action: "Prepare two concise stories on shipping work, one on QA judgment, and one on learning quickly." },
-      { day: "Day 4", focus: "Technical interview prep", action: "Review data structures fundamentals plus one backend request-response flow you can explain clearly." },
-      { day: "Day 5", focus: "AI product angle", action: "Practice explaining how this Groq-powered app handles validation, structured output, and deployment." },
-      { day: "Day 6", focus: "Company alignment", action: "Map your strongest experiences directly to the company’s product culture and job requirements." },
-      { day: "Day 7", focus: "Mock screen", action: "Run a 20-minute mock recruiter screen using the generated pitch and interview questions." }
+      { day: "Day 1", focus: "Resume tightening", action: "Add metrics to the internship bullets and make the strongest project read more end to end." },
+      { day: "Day 2", focus: "Project walkthroughs", action: "Practice explaining ShiftPilot and SignalBoard from user flow to API and data layer." },
+      { day: "Day 3", focus: "Behavioral stories", action: "Prepare one story on collaboration, one on debugging, and one on improving software quality before release." },
+      { day: "Day 4", focus: "Frontend depth", action: "Review form state, component design, accessibility, and the tradeoffs behind the React work shown on the resume." },
+      { day: "Day 5", focus: "Backend fluency", action: "Rehearse a clean explanation of one REST flow, one SQL query pattern, and one auth decision from the main project." },
+      { day: "Day 6", focus: "Company alignment", action: "Map internship and project experience to Northstar Health’s product, collaboration, and reliability expectations." },
+      { day: "Day 7", focus: "Mock screen", action: "Run a full recruiter-style screen using the candidate pitch, strongest bullet rewrites, and likely interview questions." }
     ]
   },
   meta: {
     model: "demo-preview",
-    generatedAt: "2026-03-18T20:30:00.000Z",
+    generatedAt: "2026-03-19T17:00:00.000Z",
     live: false
   }
 };
@@ -389,6 +388,8 @@ const runDemo = (message, hydrateInputs = true) => {
   setStatus("Demo Loaded", "warning");
   if (message) {
     showBanner(message);
+  } else {
+    hideBanner();
   }
 };
 
@@ -429,7 +430,7 @@ form.addEventListener("submit", async (event) => {
     setStatus("Live Analysis", "success");
   } catch (error) {
     if (isGithubPages) {
-      runDemo("This GitHub Pages preview cannot run the serverless API route. Demo output is shown here; deploy the repo on Vercel with GROQ_API_KEY for live analysis.", false);
+      runDemo("", false);
     } else {
       setStatus("Error", "error");
       showBanner(error.message || "Unable to complete the analysis.");
@@ -441,11 +442,11 @@ form.addEventListener("submit", async (event) => {
 
 demoButton.addEventListener("click", () => {
   hideBanner();
-  runDemo("Loaded the built-in demo scenario so the interface can be reviewed without an API key.");
+  runDemo();
 });
 
 clearButton.addEventListener("click", clearForm);
 
 if (isGithubPages) {
-  runDemo("This page is running on GitHub Pages, so it loads a demo analysis by default. The same UI uses the live Groq backend when deployed on Vercel.");
+  runDemo();
 }
