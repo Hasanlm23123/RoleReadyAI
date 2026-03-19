@@ -5,14 +5,14 @@
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <meta name="description"
-    content="RoleReady AI analyzes a resume against a job description and generates a fit score, recruiter summary, interview prep plan, and resume improvements." />
-  <title>RoleReady AI | Labib Hasan</title>
+    content="RoleReady AI is an AI resume and interview prep studio that compares a resume to a job description, surfaces keyword gaps, rewrites bullets, and builds a concrete prep plan." />
+  <title>RoleReady AI | AI Resume & Interview Prep Studio</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link
     href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&family=Manrope:wght@400;500;600;700;800&family=Space+Grotesk:wght@500;700&display=swap"
     rel="stylesheet">
-  <link rel="stylesheet" href="./styles.css?v=20260318a">
+  <link rel="stylesheet" href="./styles.css?v=20260319d">
 </head>
 
 <body>
@@ -22,48 +22,60 @@
   <main class="app-shell">
     <header class="topbar">
       <div>
-        <p class="eyebrow">Full-Stack AI Project</p>
+        <p class="eyebrow">AI Resume & Interview Prep Studio</p>
         <h1>RoleReady AI</h1>
       </div>
       <div class="topbar-links">
-        <a class="topbar-link" href="https://hasanlm23123.github.io/">Back to Portfolio</a>
+        <a class="topbar-link" id="backToPortfolioLink" href="https://hasanlm23123.github.io/">Back to Portfolio</a>
       </div>
     </header>
 
     <section class="hero panel">
       <div class="hero-copy">
-        <p class="eyebrow">Resume-to-Interview Studio</p>
-        <h2>Paste a resume and job post, then turn that into an actual recruiting plan.</h2>
+        <p class="eyebrow">Resume-to-Interview Analysis Tool</p>
+        <h2>Upload a resume, match it against a job post, and walk away with a sharper interview plan.</h2>
         <p class="hero-text">
-          RoleReady AI scores candidate fit, surfaces strengths and gaps, rewrites bullets, drafts a short recruiter
-          pitch, and builds interview prep questions from the same inputs. It is designed as a Vercel-ready full-stack
-          app with a static frontend and a server-side Groq route.
+          RoleReady AI turns one resume and one job description into a fit score, cleaner bullets, missing keyword
+          signals, recruiter-facing positioning, and a prep plan you can use immediately.
         </p>
-        <div class="hero-chips">
-          <span class="chip">Groq Chat API</span>
-          <span class="chip">Structured JSON Output</span>
-          <span class="chip">Serverless Backend</span>
-          <span class="chip">Recruiter-Facing UX</span>
+        <div class="hero-actions">
+          <a class="primary-button hero-primary" href="#workspace">Try The Live Demo</a>
+          <button class="secondary-button" id="heroDemoButton" type="button">Reload Sample Analysis</button>
+        </div>
+        <div class="hero-metrics">
+          <article class="hero-metric">
+            <span class="metric-label">Problem Solved</span>
+            <strong>Shows where a resume lands, what it is missing, and what to fix next.</strong>
+          </article>
+          <article class="hero-metric">
+            <span class="metric-label">Tech Stack</span>
+            <strong>JavaScript, Groq API, Vercel Serverless, streamed UI, and PDF parsing.</strong>
+          </article>
+          <article class="hero-metric">
+            <span class="metric-label">Instant Payoff</span>
+            <strong>A realistic demo is loaded by default so the output is visible above the fold.</strong>
+          </article>
         </div>
       </div>
       <aside class="hero-note">
         <span class="note-label">What It Produces</span>
         <ul class="note-list">
-          <li>Fit score and recruiter summary</li>
-          <li>Strengths, gaps, and fixes</li>
-          <li>Improved resume bullets</li>
-          <li>Interview questions with talking points</li>
-          <li>7-day prep plan</li>
+          <li>Fit score with a visual gauge</li>
+          <li>Recruiter-style summary and positioning</li>
+          <li>ATS-style missing keyword gaps</li>
+          <li>Side-by-side bullet rewrites</li>
+          <li>Categorized interview questions</li>
+          <li>7-day interview prep plan</li>
         </ul>
       </aside>
     </section>
 
-    <section class="workspace">
+    <section class="workspace" id="workspace">
       <section class="panel form-panel">
         <div class="section-header">
           <div>
             <p class="section-kicker">Input</p>
-            <h3>Candidate + Job Context</h3>
+            <h3>Resume + Job Context</h3>
           </div>
           <button class="ghost-button" id="clearButton" type="button">Clear</button>
         </div>
@@ -71,6 +83,30 @@
         <div class="preview-banner hidden" id="previewBanner" role="status" aria-live="polite"></div>
 
         <form id="analysisForm" class="analysis-form">
+          <section class="upload-panel">
+            <div class="upload-dropzone" id="uploadDropzone" tabindex="0" role="button"
+              aria-label="Upload a resume PDF">
+              <div class="upload-copy">
+                <p class="upload-title">Drop a resume PDF here</p>
+                <p class="upload-detail">
+                  Or choose a file to parse server-side. You can still paste raw resume text below if you prefer.
+                </p>
+              </div>
+              <div class="upload-actions">
+                <button class="secondary-button upload-button" id="chooseFileButton" type="button">Choose Resume
+                  File</button>
+                <input id="resumeFileInput" type="file" accept=".pdf,.txt,.md,.rtf" hidden>
+              </div>
+            </div>
+            <div class="file-meta hidden" id="fileMeta">
+              <div>
+                <span class="metric-label">Selected file</span>
+                <strong id="fileNameLabel">Resume.pdf</strong>
+              </div>
+              <button class="ghost-button" id="removeFileButton" type="button">Remove File</button>
+            </div>
+          </section>
+
           <div class="field-grid">
             <label class="field">
               <span>Job Title</span>
@@ -105,22 +141,31 @@
 
           <label class="field field-large">
             <span>Resume Text</span>
-            <textarea id="resumeText" name="resumeText" rows="14"
-              placeholder="Paste the resume content here..."></textarea>
+            <textarea id="resumeText" name="resumeText" rows="12"
+              placeholder="Paste resume content here, or upload a PDF above..."></textarea>
           </label>
 
           <label class="field field-large">
             <span>Job Description</span>
-            <textarea id="jobDescription" name="jobDescription" rows="14"
+            <textarea id="jobDescription" name="jobDescription" rows="12"
               placeholder="Paste the target role description here..."></textarea>
           </label>
 
           <div class="action-row">
-            <button class="primary-button" id="analyzeButton" type="submit">Analyze With AI</button>
+            <button class="primary-button" id="analyzeButton" type="submit">Analyze Resume</button>
             <button class="secondary-button" id="demoButton" type="button">Load Demo</button>
           </div>
         </form>
 
+        <section class="history-panel">
+          <div class="card-header">
+            <div>
+              <p class="section-kicker">History</p>
+              <h4>Recent Analyses</h4>
+            </div>
+          </div>
+          <div class="history-list" id="historyList"></div>
+        </section>
       </section>
 
       <section class="panel results-panel">
@@ -129,19 +174,22 @@
             <p class="section-kicker">Output</p>
             <h3>Analysis Board</h3>
           </div>
-          <div class="status-pill neutral" id="statusPill">Ready</div>
+          <div class="results-actions">
+            <button class="ghost-button no-print" id="exportPdfButton" type="button">Export PDF</button>
+            <div class="status-pill neutral" id="statusPill">Ready</div>
+          </div>
         </div>
 
-        <div class="empty-state" id="emptyState">
+        <div class="empty-state hidden" id="emptyState">
           <p class="empty-kicker">Nothing analyzed yet.</p>
           <h4>Use the demo or run a live analysis.</h4>
           <p>
-            The output will populate with a recruiter-style readout, stronger resume bullets, likely interview
-            questions, and an action plan.
+            The output will populate with a recruiter-style readout, stronger resume bullets, ATS-style keyword gaps,
+            categorized interview questions, and a concrete action plan.
           </p>
         </div>
 
-        <div class="results-content hidden" id="resultsContent">
+        <div class="results-content" id="resultsContent">
           <section class="scoreboard">
             <div class="score-ring" id="scoreRing">
               <div class="score-ring-inner">
@@ -155,11 +203,22 @@
                 <span id="roleMeta">Role</span>
                 <span id="companyMeta">Company</span>
                 <span id="decisionMeta">Decision</span>
+                <span id="resumeSourceMeta">Resume Source</span>
               </div>
               <h4 id="summaryHeadline">Summary headline</h4>
               <p id="summaryText"></p>
               <div class="generated-meta" id="generatedMeta"></div>
             </div>
+          </section>
+
+          <section class="result-card keyword-card">
+            <div class="card-header">
+              <div>
+                <p class="section-kicker">ATS Match</p>
+                <h4>Missing Keywords Worth Addressing</h4>
+              </div>
+            </div>
+            <div class="keyword-chip-list" id="keywordGapList"></div>
           </section>
 
           <section class="grid-two">
@@ -200,8 +259,10 @@
 
           <section class="result-card">
             <div class="card-header">
-              <p class="section-kicker">Resume Upgrades</p>
-              <h4>Bullet Rewrites</h4>
+              <div>
+                <p class="section-kicker">Resume Upgrades</p>
+                <h4>Before / After Bullet Rewrites</h4>
+              </div>
             </div>
             <div class="rewrite-list" id="rewritesList"></div>
           </section>
@@ -226,9 +287,74 @@
         </div>
       </section>
     </section>
+
+    <section class="roadmap panel">
+      <div class="section-header">
+        <div>
+          <p class="section-kicker">Roadmap</p>
+          <h3>Product Direction</h3>
+        </div>
+      </div>
+
+      <div class="roadmap-grid">
+        <article class="roadmap-column">
+          <span class="note-label">Built</span>
+          <ul>
+            <li>Live streamed analysis with a progress modal</li>
+            <li>Server-side PDF resume parsing and drag-and-drop upload</li>
+            <li>ATS keyword gaps, recruiter summary, and fit score gauge</li>
+            <li>Side-by-side bullet rewrites with copy actions</li>
+          </ul>
+        </article>
+
+        <article class="roadmap-column">
+          <span class="note-label">Next</span>
+          <ul>
+            <li>Job URL ingestion to remove manual description copy-paste</li>
+            <li>Shareable reports for advisor and mock-interview feedback</li>
+            <li>Usage analytics to measure completion and drop-off points</li>
+            <li>Role-specific prompt modes for backend, product, and frontend tracks</li>
+          </ul>
+        </article>
+
+        <article class="roadmap-column">
+          <span class="note-label">Considering</span>
+          <ul>
+            <li>Multi-role comparison so one resume can be ranked across several jobs</li>
+            <li>Richer exported reports with a more branded PDF layout</li>
+            <li>Team review mode for peer feedback on one saved analysis</li>
+            <li>Deeper keyword weighting with domain-specific scoring</li>
+          </ul>
+        </article>
+      </div>
+    </section>
   </main>
 
-  <script src="./app.js?v=20260319a"></script>
+  <div class="analysis-modal hidden" id="analysisModal" aria-hidden="true">
+    <div class="analysis-modal-card panel" role="dialog" aria-modal="true" aria-labelledby="analysisModalTitle">
+      <div class="modal-header">
+        <div>
+          <p class="section-kicker">Live Progress</p>
+          <h3 id="analysisModalTitle">Analyzing Resume</h3>
+        </div>
+        <p class="modal-stage" id="modalStageText">Preparing request...</p>
+      </div>
+      <div class="modal-layout">
+        <div class="modal-ring" id="modalProgressRing">
+          <div class="modal-ring-inner">
+            <strong id="modalProgressValue">0%</strong>
+            <span>Processed</span>
+          </div>
+        </div>
+        <div class="modal-feed">
+          <p class="section-kicker">Live Model Output</p>
+          <pre id="streamPreview">Waiting for model response...</pre>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script src="./app.js?v=20260319d"></script>
 </body>
 
 </html>
