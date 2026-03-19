@@ -12,7 +12,7 @@
   <link
     href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&family=Manrope:wght@400;500;600;700;800&family=Space+Grotesk:wght@500;700&display=swap"
     rel="stylesheet">
-  <link rel="stylesheet" href="./styles.css?v=20260319d">
+  <link rel="stylesheet" href="./styles.css?v=20260319f">
 </head>
 
 <body>
@@ -44,29 +44,44 @@
         </div>
         <div class="hero-metrics">
           <article class="hero-metric">
-            <span class="metric-label">Problem Solved</span>
-            <strong>Shows where a resume lands, what it is missing, and what to fix next.</strong>
+            <span class="metric-label">Role Matches Analyzed</span>
+            <strong id="metricAnalysesValue">0</strong>
           </article>
           <article class="hero-metric">
-            <span class="metric-label">Tech Stack</span>
-            <strong>JavaScript, Groq API, Vercel Serverless, streamed UI, and PDF parsing.</strong>
+            <span class="metric-label">Average Fit Score</span>
+            <strong id="metricAverageFitValue">0%</strong>
           </article>
           <article class="hero-metric">
-            <span class="metric-label">Instant Payoff</span>
-            <strong>A realistic demo is loaded by default so the output is visible above the fold.</strong>
+            <span class="metric-label">Reports Exported</span>
+            <strong id="metricExportsValue">0</strong>
+          </article>
+          <article class="hero-metric">
+            <span class="metric-label">Bullets Rewritten</span>
+            <strong id="metricBulletsValue">0</strong>
           </article>
         </div>
       </div>
       <aside class="hero-note">
-        <span class="note-label">What It Produces</span>
-        <ul class="note-list">
-          <li>Fit score with a visual gauge</li>
-          <li>Recruiter-style summary and positioning</li>
-          <li>ATS-style missing keyword gaps</li>
-          <li>Side-by-side bullet rewrites</li>
-          <li>Categorized interview questions</li>
-          <li>7-day interview prep plan</li>
-        </ul>
+        <span class="note-label">Loaded Sample Result</span>
+        <div class="hero-preview-card">
+          <div class="hero-preview-score">
+            <strong id="heroPreviewScore">84%</strong>
+            <span id="heroPreviewRole">Associate Product Engineer</span>
+          </div>
+          <p class="hero-preview-copy" id="heroPreviewSummary">
+            Strong early-career fit with shipped React work, QA discipline, and a clear full-stack project anchor.
+          </p>
+          <div class="hero-preview-keywords" id="heroPreviewKeywords">
+            <span class="keyword-chip">SQL</span>
+            <span class="keyword-chip">Onboarding</span>
+            <span class="keyword-chip">Analytics</span>
+          </div>
+        </div>
+        <div class="hero-feedback-card">
+          <span class="note-label">Pilot Feedback</span>
+          <blockquote>“nice it works”</blockquote>
+          <p>First live tester after the initial deployment.</p>
+        </div>
       </aside>
     </section>
 
@@ -139,6 +154,15 @@
             </label>
           </div>
 
+          <div class="job-import-row">
+            <label class="field">
+              <span>Job URL</span>
+              <input id="jobUrl1" name="jobUrl1" type="url"
+                placeholder="https://www.linkedin.com/jobs/view/... or another public job posting">
+            </label>
+            <button class="ghost-button job-fetch-button" id="fetchJob1" type="button">Fetch Job Text</button>
+          </div>
+
           <label class="field field-large">
             <span>Resume Text</span>
             <textarea id="resumeText" name="resumeText" rows="12"
@@ -151,8 +175,70 @@
               placeholder="Paste the target role description here..."></textarea>
           </label>
 
+          <section class="comparison-lab">
+            <div class="card-header">
+              <div>
+                <p class="section-kicker">Compare Roles</p>
+                <h4>Rank up to three jobs with one resume</h4>
+              </div>
+            </div>
+
+            <div class="comparison-slot-grid">
+              <article class="job-slot">
+                <span class="note-label">Role 2</span>
+                <div class="field-grid">
+                  <label class="field">
+                    <span>Job Title</span>
+                    <input id="jobTitle2" type="text" placeholder="Product Engineer">
+                  </label>
+                  <label class="field">
+                    <span>Company</span>
+                    <input id="companyName2" type="text" placeholder="Company name">
+                  </label>
+                </div>
+                <div class="job-import-row">
+                  <label class="field">
+                    <span>Job URL</span>
+                    <input id="jobUrl2" type="url" placeholder="Paste another public job link">
+                  </label>
+                  <button class="ghost-button job-fetch-button" id="fetchJob2" type="button">Fetch Job Text</button>
+                </div>
+                <label class="field field-large compact-field">
+                  <span>Job Description</span>
+                  <textarea id="jobDescription2" rows="7" placeholder="Optional second role description"></textarea>
+                </label>
+              </article>
+
+              <article class="job-slot">
+                <span class="note-label">Role 3</span>
+                <div class="field-grid">
+                  <label class="field">
+                    <span>Job Title</span>
+                    <input id="jobTitle3" type="text" placeholder="QA Automation Engineer">
+                  </label>
+                  <label class="field">
+                    <span>Company</span>
+                    <input id="companyName3" type="text" placeholder="Company name">
+                  </label>
+                </div>
+                <div class="job-import-row">
+                  <label class="field">
+                    <span>Job URL</span>
+                    <input id="jobUrl3" type="url" placeholder="Paste a third public job link">
+                  </label>
+                  <button class="ghost-button job-fetch-button" id="fetchJob3" type="button">Fetch Job Text</button>
+                </div>
+                <label class="field field-large compact-field">
+                  <span>Job Description</span>
+                  <textarea id="jobDescription3" rows="7" placeholder="Optional third role description"></textarea>
+                </label>
+              </article>
+            </div>
+          </section>
+
           <div class="action-row">
             <button class="primary-button" id="analyzeButton" type="submit">Analyze Resume</button>
+            <button class="secondary-button" id="compareButton" type="button">Compare Filled Roles</button>
             <button class="secondary-button" id="demoButton" type="button">Load Demo</button>
           </div>
         </form>
@@ -179,6 +265,17 @@
             <div class="status-pill neutral" id="statusPill">Ready</div>
           </div>
         </div>
+
+        <section class="result-card comparison-board" data-section="compare">
+          <div class="card-header">
+            <div>
+              <p class="section-kicker">Comparison</p>
+              <h4>Best Match Ranking</h4>
+            </div>
+          </div>
+          <div class="comparison-list" id="comparisonList"></div>
+          <p class="comparison-empty hidden" id="comparisonEmpty">Fill at least two job descriptions to rank roles side by side.</p>
+        </section>
 
         <div class="empty-state hidden" id="emptyState">
           <p class="empty-kicker">Nothing analyzed yet.</p>
@@ -218,11 +315,20 @@
                 <h4>Missing Keywords Worth Addressing</h4>
               </div>
             </div>
-            <div class="keyword-chip-list" id="keywordGapList"></div>
+            <div class="ats-grid">
+              <div>
+                <p class="keyword-heading">Missing</p>
+                <div class="keyword-chip-list" id="keywordGapList"></div>
+              </div>
+              <div>
+                <p class="keyword-heading">Already Matching</p>
+                <div class="keyword-chip-list" id="matchedKeywordList"></div>
+              </div>
+            </div>
           </section>
 
           <section class="grid-two">
-            <article class="result-card">
+            <article class="result-card" data-section="positioning">
               <div class="card-header">
                 <p class="section-kicker">Positioning</p>
                 <h4>Candidate Pitch</h4>
@@ -248,7 +354,7 @@
               <div class="stack-list" id="strengthsList"></div>
             </article>
 
-            <article class="result-card">
+            <article class="result-card" data-section="gaps">
               <div class="card-header">
                 <p class="section-kicker">Gaps</p>
                 <h4>What Needs Work</h4>
@@ -257,7 +363,7 @@
             </article>
           </section>
 
-          <section class="result-card">
+          <section class="result-card" data-section="rewrites">
             <div class="card-header">
               <div>
                 <p class="section-kicker">Resume Upgrades</p>
@@ -268,7 +374,7 @@
           </section>
 
           <section class="grid-two">
-            <article class="result-card">
+            <article class="result-card" data-section="questions">
               <div class="card-header">
                 <p class="section-kicker">Interview Prep</p>
                 <h4>Likely Questions</h4>
@@ -276,7 +382,7 @@
               <div class="question-list" id="questionsList"></div>
             </article>
 
-            <article class="result-card">
+            <article class="result-card" data-section="prep">
               <div class="card-header">
                 <p class="section-kicker">Action Plan</p>
                 <h4>7-Day Prep Plan</h4>
@@ -286,6 +392,33 @@
           </section>
         </div>
       </section>
+    </section>
+
+    <section class="analytics panel">
+      <div class="section-header">
+        <div>
+          <p class="section-kicker">Usage Insights</p>
+          <h3>What live users are doing inside the product</h3>
+        </div>
+      </div>
+
+      <div class="analytics-grid">
+        <article class="analytics-card">
+          <span class="note-label">Pipeline</span>
+          <div class="analytics-number" id="insightPageViews">0</div>
+          <p>Page views tracked</p>
+          <div class="analytics-detail-list">
+            <span id="insightCompletionRate">0% completion rate</span>
+            <span id="insightComparisons">0 multi-role comparisons</span>
+            <span id="insightImports">0 job URL imports</span>
+          </div>
+        </article>
+
+        <article class="analytics-card">
+          <span class="note-label">Section Attention</span>
+          <div class="section-view-list" id="sectionViewList"></div>
+        </article>
+      </div>
     </section>
 
     <section class="roadmap panel">
@@ -303,27 +436,27 @@
             <li>Live streamed analysis with a progress modal</li>
             <li>Server-side PDF resume parsing and drag-and-drop upload</li>
             <li>ATS keyword gaps, recruiter summary, and fit score gauge</li>
-            <li>Side-by-side bullet rewrites with copy actions</li>
+            <li>Three-role comparison, PDF export, and lightweight usage metrics</li>
           </ul>
         </article>
 
         <article class="roadmap-column">
           <span class="note-label">Next</span>
           <ul>
-            <li>Job URL ingestion to remove manual description copy-paste</li>
             <li>Shareable reports for advisor and mock-interview feedback</li>
-            <li>Usage analytics to measure completion and drop-off points</li>
             <li>Role-specific prompt modes for backend, product, and frontend tracks</li>
+            <li>Branded report templates beyond the current export layout</li>
+            <li>Optional analytics-provider integration for deeper funnel tracking</li>
           </ul>
         </article>
 
         <article class="roadmap-column">
           <span class="note-label">Considering</span>
           <ul>
-            <li>Multi-role comparison so one resume can be ranked across several jobs</li>
-            <li>Richer exported reports with a more branded PDF layout</li>
-            <li>Team review mode for peer feedback on one saved analysis</li>
+            <li>Advisor review mode for comments on one saved analysis</li>
             <li>Deeper keyword weighting with domain-specific scoring</li>
+            <li>Reusable resume profiles for repeated applications</li>
+            <li>Team review mode for peer feedback on one saved analysis</li>
           </ul>
         </article>
       </div>
@@ -354,7 +487,9 @@
     </div>
   </div>
 
-  <script src="./app.js?v=20260319d"></script>
+  <script src="https://unpkg.com/html2canvas@1.4.1/dist/html2canvas.min.js"></script>
+  <script src="https://unpkg.com/jspdf@latest/dist/jspdf.umd.min.js"></script>
+  <script src="./app.js?v=20260319f"></script>
 </body>
 
 </html>

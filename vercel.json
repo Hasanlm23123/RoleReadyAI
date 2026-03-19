@@ -1,7 +1,16 @@
 {
   "functions": {
     "api/role-ready.js": {
+      "maxDuration": 25
+    },
+    "api/compare.js": {
+      "maxDuration": 30
+    },
+    "api/extract-job.js": {
       "maxDuration": 20
+    },
+    "api/metrics.js": {
+      "maxDuration": 10
     }
   }
 }
