@@ -199,8 +199,19 @@ const createElement = (tagName, className, textContent) => {
   return element;
 };
 
+const appendEmptyCard = (container, title, detail) => {
+  const card = createElement("article", "stack-item");
+  card.append(createElement("h5", "", title), createElement("p", "", detail));
+  container.append(card);
+};
+
 const renderStrengths = (items) => {
   output.strengthsList.replaceChildren();
+  if (!items.length) {
+    appendEmptyCard(output.strengthsList, "No strengths returned", "The provider returned a partial analysis. Run it again for a fuller strengths breakdown.");
+    return;
+  }
+
   items.forEach((item) => {
     const card = createElement("article", "stack-item");
     card.append(createElement("h5", "", item.title), createElement("p", "", item.detail));
@@ -210,6 +221,11 @@ const renderStrengths = (items) => {
 
 const renderGaps = (items) => {
   output.gapsList.replaceChildren();
+  if (!items.length) {
+    appendEmptyCard(output.gapsList, "No gaps returned", "The provider returned a partial analysis. Run it again for a fuller gaps breakdown.");
+    return;
+  }
+
   items.forEach((item) => {
     const card = createElement("article", "stack-item");
     card.append(
@@ -223,6 +239,13 @@ const renderGaps = (items) => {
 
 const renderRewrites = (items) => {
   output.rewritesList.replaceChildren();
+  if (!items.length) {
+    const card = createElement("article", "rewrite-card");
+    card.append(createElement("div", "rewrite-original", "No rewritten bullets returned."), createElement("div", "rewrite-copy", "Run the analysis again to generate bullet rewrites."));
+    output.rewritesList.append(card);
+    return;
+  }
+
   items.forEach((item) => {
     const card = createElement("article", "rewrite-card");
     const improvedWrap = createElement("div", "rewrite-copy");
@@ -239,6 +262,11 @@ const renderRewrites = (items) => {
 
 const renderQuestions = (items) => {
   output.questionsList.replaceChildren();
+  if (!items.length) {
+    appendEmptyCard(output.questionsList, "No interview questions returned", "The provider returned a partial analysis. Run it again for interview questions.");
+    return;
+  }
+
   items.forEach((item) => {
     const card = createElement("article", "question-card");
     const list = createElement("ul", "talking-points");
@@ -253,6 +281,11 @@ const renderQuestions = (items) => {
 
 const renderPrepPlan = (items) => {
   output.prepPlanList.replaceChildren();
+  if (!items.length) {
+    appendEmptyCard(output.prepPlanList, "No prep plan returned", "The provider returned a partial analysis. Run it again for a prep plan.");
+    return;
+  }
+
   items.forEach((item) => {
     const card = createElement("article", "timeline-card");
     card.append(

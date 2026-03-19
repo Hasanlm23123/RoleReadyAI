@@ -13,7 +13,7 @@ RoleReady AI is a Vercel-ready full-stack project that analyzes a candidate resu
 - Static frontend: `index.html`
 - Frontend logic: `app.js`
 - Serverless backend: `api/role-ready.js`
-- Model integration: Groq Chat Completions API with strict structured JSON output
+- Model integration: Groq Chat Completions API with JSON object output and server-side normalization
 
 ## Deployment
 
