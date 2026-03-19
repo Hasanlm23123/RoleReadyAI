@@ -906,6 +906,10 @@ const readErrorResponse = async (response) => {
 };
 
 const fetchJobFromUrl = async (slotNumber, silent = false) => {
+  if (isGithubPages) {
+    throw new Error("Job URL import is only available on the live deployed app.");
+  }
+
   const urlField = slotNumber === 1 ? fields.jobUrl1 : fields[`jobUrl${slotNumber}`];
   const titleField = slotNumber === 1 ? fields.jobTitle : fields[`jobTitle${slotNumber}`];
   const companyField = slotNumber === 1 ? fields.companyName : fields[`companyName${slotNumber}`];

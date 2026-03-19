@@ -13,6 +13,8 @@ const METRIC_KEYS = {
   fitScoreTotal: "fit-score-total",
   fitScoreCount: "fit-score-count",
   jobUrlImports: "job-url-imports",
+  sectionSnapshot: "section-snapshot",
+  sectionScoreBreakdown: "section-score-breakdown",
   sectionPositioning: "section-positioning",
   sectionGaps: "section-gaps",
   sectionRewrites: "section-rewrites",
@@ -128,6 +130,8 @@ const recordMetricEvent = async (eventName, payload = {}) => {
   if (event === "section_view") {
     const section = normalizeText(payload.section).toLowerCase();
     const sectionMetric = {
+      snapshot: METRIC_KEYS.sectionSnapshot,
+      "score-breakdown": METRIC_KEYS.sectionScoreBreakdown,
       positioning: METRIC_KEYS.sectionPositioning,
       gaps: METRIC_KEYS.sectionGaps,
       rewrites: METRIC_KEYS.sectionRewrites,
@@ -153,6 +157,8 @@ const getMetricsSnapshot = async () => {
     fitScoreTotal,
     fitScoreCount,
     jobUrlImports,
+    sectionSnapshot,
+    sectionScoreBreakdown,
     sectionPositioning,
     sectionGaps,
     sectionRewrites,
@@ -169,6 +175,8 @@ const getMetricsSnapshot = async () => {
     getCounterValue(METRIC_KEYS.fitScoreTotal),
     getCounterValue(METRIC_KEYS.fitScoreCount),
     getCounterValue(METRIC_KEYS.jobUrlImports),
+    getCounterValue(METRIC_KEYS.sectionSnapshot),
+    getCounterValue(METRIC_KEYS.sectionScoreBreakdown),
     getCounterValue(METRIC_KEYS.sectionPositioning),
     getCounterValue(METRIC_KEYS.sectionGaps),
     getCounterValue(METRIC_KEYS.sectionRewrites),
@@ -191,6 +199,8 @@ const getMetricsSnapshot = async () => {
     jobUrlImports,
     completionRate,
     sectionViews: {
+      snapshot: sectionSnapshot,
+      "score-breakdown": sectionScoreBreakdown,
       positioning: sectionPositioning,
       gaps: sectionGaps,
       rewrites: sectionRewrites,
