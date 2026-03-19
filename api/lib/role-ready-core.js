@@ -126,11 +126,28 @@ const parseBody = (body) => {
     return {};
   }
 
+  if (Buffer.isBuffer(body)) {
+    try {
+      return JSON.parse(body.toString("utf8"));
+    } catch (error) {
+      return {};
+    }
+  }
+
   if (typeof body === "string") {
     try {
       return JSON.parse(body);
     } catch (error) {
       return {};
+    }
+  }
+
+  if (body && typeof body === "object" && typeof body.toString === "function" && !Array.isArray(body)) {
+    const stringified = body.toString();
+    if (typeof stringified === "string" && stringified !== "[object Object]") {
+      try {
+        return JSON.parse(stringified);
+      } catch (error) {}
     }
   }
 
