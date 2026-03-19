@@ -12,7 +12,7 @@
   <link
     href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&family=Manrope:wght@400;500;600;700;800&family=Space+Grotesk:wght@500;700&display=swap"
     rel="stylesheet">
-  <link rel="stylesheet" href="./styles.css?v=20260319f">
+  <link rel="stylesheet" href="./styles.css?v=20260319g">
 </head>
 
 <body>
@@ -78,9 +78,12 @@
           </div>
         </div>
         <div class="hero-feedback-card">
-          <span class="note-label">Pilot Feedback</span>
-          <blockquote>“nice it works”</blockquote>
-          <p>First live tester after the initial deployment.</p>
+          <span class="note-label">What This Demonstrates</span>
+          <ul class="note-list">
+            <li>Server-side PDF parsing paired with structured AI output.</li>
+            <li>Streaming analysis, comparison, and export in one polished workflow.</li>
+            <li>Recruiter-style scoring grounded in resume evidence instead of generic advice.</li>
+          </ul>
         </div>
       </aside>
     </section>
@@ -308,6 +311,28 @@
             </div>
           </section>
 
+          <section class="grid-two quick-read-grid">
+            <article class="result-card" data-section="snapshot">
+              <div class="card-header">
+                <div>
+                  <p class="section-kicker">Recruiter Snapshot</p>
+                  <h4>Fastest Read On The Candidate</h4>
+                </div>
+              </div>
+              <div class="snapshot-list" id="snapshotList"></div>
+            </article>
+
+            <article class="result-card" data-section="score-breakdown">
+              <div class="card-header">
+                <div>
+                  <p class="section-kicker">Why This Score</p>
+                  <h4>Signal Breakdown</h4>
+                </div>
+              </div>
+              <div class="breakdown-list" id="scoreBreakdownList"></div>
+            </article>
+          </section>
+
           <section class="result-card keyword-card">
             <div class="card-header">
               <div>
@@ -397,8 +422,8 @@
     <section class="analytics panel">
       <div class="section-header">
         <div>
-          <p class="section-kicker">Usage Insights</p>
-          <h3>What live users are doing inside the product</h3>
+          <p class="section-kicker">Live Deployment</p>
+          <h3>What the shipped app is tracking in production</h3>
         </div>
       </div>
 
@@ -424,8 +449,8 @@
     <section class="roadmap panel">
       <div class="section-header">
         <div>
-          <p class="section-kicker">Roadmap</p>
-          <h3>Product Direction</h3>
+          <p class="section-kicker">Engineering Direction</p>
+          <h3>What This Project Already Shows And What I Would Tighten Next</h3>
         </div>
       </div>
 
@@ -441,22 +466,22 @@
         </article>
 
         <article class="roadmap-column">
-          <span class="note-label">Next</span>
+          <span class="note-label">Tighten Next</span>
           <ul>
-            <li>Shareable reports for advisor and mock-interview feedback</li>
-            <li>Role-specific prompt modes for backend, product, and frontend tracks</li>
-            <li>Branded report templates beyond the current export layout</li>
-            <li>Optional analytics-provider integration for deeper funnel tracking</li>
+            <li>Harder rate limiting and abuse controls around public usage</li>
+            <li>Stricter output validation so weak rewrites never reach the board</li>
+            <li>Role-specific scoring for backend, frontend, and QA-heavy postings</li>
+            <li>Cleaner PDF report layout beyond the current export capture</li>
           </ul>
         </article>
 
         <article class="roadmap-column">
-          <span class="note-label">Considering</span>
+          <span class="note-label">Worth Exploring</span>
           <ul>
-            <li>Advisor review mode for comments on one saved analysis</li>
-            <li>Deeper keyword weighting with domain-specific scoring</li>
-            <li>Reusable resume profiles for repeated applications</li>
-            <li>Team review mode for peer feedback on one saved analysis</li>
+            <li>Requirement-to-evidence mapping that shows which bullet supports each role ask</li>
+            <li>Stored prompt-evaluation cases to benchmark rewrite quality over time</li>
+            <li>Keyword weighting tuned by domain instead of flat term matching</li>
+            <li>Optional reviewer comments on one saved analysis for mock interviews</li>
           </ul>
         </article>
       </div>
@@ -489,7 +514,7 @@
 
   <script src="https://unpkg.com/html2canvas@1.4.1/dist/html2canvas.min.js"></script>
   <script src="https://unpkg.com/jspdf@latest/dist/jspdf.umd.min.js"></script>
-  <script src="./app.js?v=20260319f"></script>
+  <script src="./app.js?v=20260319g"></script>
 </body>
 
 </html>

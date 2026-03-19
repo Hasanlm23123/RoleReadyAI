@@ -744,6 +744,102 @@ select {
   background: rgba(255, 255, 255, 0.03);
 }
 
+.quick-read-grid {
+  align-items: start;
+}
+
+.snapshot-list,
+.breakdown-list {
+  display: grid;
+  gap: 12px;
+  margin-top: 16px;
+}
+
+.snapshot-item,
+.breakdown-row {
+  display: grid;
+  gap: 12px;
+  padding: 16px;
+  border-radius: 20px;
+  border: 1px solid var(--line);
+  background: rgba(255, 255, 255, 0.04);
+}
+
+.snapshot-item {
+  grid-template-columns: auto minmax(0, 1fr);
+  align-items: start;
+}
+
+.snapshot-index {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 42px;
+  padding: 10px 12px;
+  border-radius: 999px;
+  border: 1px solid rgba(62, 213, 194, 0.26);
+  background: rgba(62, 213, 194, 0.1);
+  color: #8ce8de;
+  font-family: "IBM Plex Mono", monospace;
+  font-size: 0.82rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.snapshot-copy {
+  margin: 0;
+  color: var(--muted-strong);
+  line-height: 1.65;
+}
+
+.breakdown-heading {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+}
+
+.breakdown-label {
+  color: var(--muted-strong);
+  font-weight: 800;
+}
+
+.breakdown-score {
+  color: #8ce8de;
+  font-family: "IBM Plex Mono", monospace;
+  font-size: 0.88rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.breakdown-bar-track {
+  height: 12px;
+  overflow: hidden;
+  border-radius: 999px;
+  border: 1px solid var(--line);
+  background: rgba(255, 255, 255, 0.05);
+}
+
+.breakdown-bar-fill {
+  height: 100%;
+  border-radius: inherit;
+  background: linear-gradient(90deg, rgba(62, 213, 194, 0.9), rgba(32, 166, 150, 0.95));
+}
+
+.breakdown-mid {
+  background: linear-gradient(90deg, rgba(255, 158, 102, 0.92), rgba(233, 122, 61, 0.95));
+}
+
+.breakdown-soft {
+  background: linear-gradient(90deg, rgba(255, 111, 132, 0.92), rgba(224, 77, 103, 0.95));
+}
+
+.breakdown-rationale {
+  margin: 0;
+  color: var(--muted);
+  line-height: 1.6;
+}
+
 .keyword-chip-list,
 .stack-list,
 .rewrite-list,
@@ -1041,6 +1137,10 @@ select {
   color: var(--muted);
 }
 
+.hero-feedback-card .note-list {
+  margin-top: 0;
+}
+
 .analytics {
   margin-top: 22px;
   padding: 22px;
@@ -1215,6 +1315,8 @@ select {
   .panel,
   .result-card,
   .scoreboard,
+  .snapshot-item,
+  .breakdown-row,
   .stack-item,
   .question-card,
   .timeline-card,
@@ -1231,6 +1333,10 @@ select {
   .result-card,
   .score-copy,
   .score-ring-inner strong,
+  .snapshot-copy,
+  .breakdown-label,
+  .breakdown-score,
+  .breakdown-rationale,
   .stack-item h5,
   .question-card h5,
   .timeline-card h5,
@@ -1258,6 +1364,8 @@ select {
   .score-ring-inner,
   .generated-meta,
   .result-meta span,
+  .snapshot-index,
+  .breakdown-bar-track,
   .question-category,
   .timeline-day,
   .keyword-chip {

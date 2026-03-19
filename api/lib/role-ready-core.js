@@ -269,6 +269,120 @@ const normalizePrepPlan = (items) =>
     .filter((item) => item.day && item.focus && item.action)
     .slice(0, 7);
 
+const normalizeSnapshot = (items) =>
+  uniqueStrings(
+    asArray(items).map((item) =>
+      normalizeText(typeof item === "string" ? item : item && (item.text || item.summary || item.value))
+    )
+  ).slice(0, 3);
+
+const countSignalHits = (sourceText, signals) =>
+  signals.reduce((count, signal) => (sourceText.includes(signal) ? count + 1 : count), 0);
+
+const buildFallbackSnapshot = ({ roleTitle, strengths, matchedKeywords, missingKeywords }) => {
+  const snapshot = [];
+
+  if (strengths[0] && strengths[0].detail) {
+    snapshot.push(strengths[0].detail);
+  }
+
+  if (matchedKeywords.length) {
+    snapshot.push(`Existing resume language already aligns with ${matchedKeywords.slice(0, 2).join(" and ")}.`);
+  }
+
+  if (missingKeywords.length) {
+    snapshot.push(`Best next improvement is clearer evidence around ${missingKeywords.slice(0, 2).join(" and ")}.`);
+  }
+
+  if (!snapshot.length) {
+    snapshot.push(`Initial scan shows partial alignment for ${roleTitle || "the target role"}.`);
+  }
+
+  while (snapshot.length < 3) {
+    snapshot.push(snapshot[snapshot.length - 1]);
+  }
+
+  return snapshot.slice(0, 3);
+};
+
+const buildFallbackScoreBreakdown = ({ fitScore, matchedKeywords, missingKeywords, resumeText }) => {
+  const resumeLower = safeLower(resumeText);
+  const keywordScore = clampScore(
+    Math.round((matchedKeywords.length / Math.max(1, matchedKeywords.length + missingKeywords.length)) * 100)
+  );
+  const projectHits = countSignalHits(resumeLower, [
+    "built",
+    "shipped",
+    "deployed",
+    "project",
+    "app",
+    "dashboard",
+    "tool",
+    "api",
+    "auth"
+  ]);
+  const communicationHits = countSignalHits(resumeLower, [
+    "communication",
+    "coach",
+    "present",
+    "stakeholder",
+    "product",
+    "design",
+    "collabor"
+  ]);
+  const experienceScore = clampScore(Math.round(fitScore * 0.72) + Math.min(matchedKeywords.length, 4) * 5);
+  const evidenceScore = clampScore(Math.round(fitScore * 0.7) + Math.min(projectHits, 5) * 6);
+  const communicationScore = clampScore(Math.round(fitScore * 0.66) + Math.min(communicationHits, 4) * 7);
+
+  return [
+    {
+      label: "Keyword Match",
+      score: keywordScore,
+      rationale: matchedKeywords.length
+        ? `Resume already names ${matchedKeywords.slice(0, 2).join(" and ")}.`
+        : "Core role language still needs stronger alignment."
+    },
+    {
+      label: "Relevant Experience",
+      score: experienceScore,
+      rationale: "Internship and project evidence map to the role's day-to-day work."
+    },
+    {
+      label: "Project Evidence",
+      score: evidenceScore,
+      rationale: projectHits
+        ? "The profile includes shipped builds instead of only classwork or coursework."
+        : "Project work exists, but the resume should frame it more concretely."
+    },
+    {
+      label: "Communication",
+      score: communicationScore,
+      rationale: communicationHits
+        ? "The resume shows collaboration or explanation-heavy work, not only implementation."
+        : "Communication signal is present but not yet strongly emphasized."
+    }
+  ];
+};
+
+const normalizeScoreBreakdown = (items, fallbackItems) => {
+  const normalized = asArray(items)
+    .map((item) => ({
+      label: normalizeLine(item && item.label, "Score Area"),
+      score: clampScore(item && item.score),
+      rationale: normalizeLine(item && item.rationale, "No rationale provided.")
+    }))
+    .filter((item) => item.label && item.rationale)
+    .slice(0, 4);
+
+  if (normalized.length >= 4) {
+    return normalized;
+  }
+
+  const usedLabels = new Set(normalized.map((item) => item.label.toLowerCase()));
+  const fallback = asArray(fallbackItems).filter((item) => !usedLabels.has(item.label.toLowerCase()));
+  return normalized.concat(fallback).slice(0, 4);
+};
+
 const detectKeywordCandidates = (jobDescription, resumeText) => {
   const jobLower = safeLower(jobDescription);
   const resumeLower = safeLower(resumeText);
@@ -312,34 +426,68 @@ const detectKeywordCandidates = (jobDescription, resumeText) => {
 const mergeKeywordGaps = (modelKeywords, detectedKeywords) =>
   uniqueStrings([].concat(asArray(modelKeywords), asArray(detectedKeywords))).slice(0, 8);
 
-const normalizeAnalysis = (analysis, payload, keywordSignals) => ({
-  role_title: normalizeLine(analysis && analysis.role_title, payload.jobTitle || "Target role"),
-  company_name: normalizeLine(analysis && analysis.company_name, payload.companyName || "Target company"),
-  fit_score: clampScore(analysis && analysis.fit_score),
-  decision: normalizeLine(
-    analysis && analysis.decision,
-    "Analysis generated successfully, but the provider returned a partial decision summary."
-  ),
-  summary: normalizeLine(
-    analysis && analysis.summary,
-    "The provider returned a partial analysis. Try running it again for a fuller recruiter-style summary."
-  ),
-  candidate_pitch: normalizeLine(
-    analysis && analysis.candidate_pitch,
-    "The provider returned a partial analysis. Try running it again to generate a candidate pitch."
-  ),
-  recruiter_take: normalizeLine(
-    analysis && analysis.recruiter_take,
-    "The provider returned a partial analysis. Try running it again to generate the recruiter takeaway."
-  ),
-  missing_keywords: mergeKeywordGaps(analysis && analysis.missing_keywords, keywordSignals && keywordSignals.missing),
-  matched_keywords: uniqueStrings([].concat(asArray(analysis && analysis.matched_keywords), asArray(keywordSignals && keywordSignals.matched))).slice(0, 8),
-  strengths: normalizeStrengths(analysis && analysis.strengths),
-  gaps: normalizeGaps(analysis && analysis.gaps),
-  rewritten_bullets: normalizeBullets(analysis && analysis.rewritten_bullets),
-  interview_questions: normalizeQuestions(analysis && analysis.interview_questions),
-  prep_plan: normalizePrepPlan(analysis && analysis.prep_plan)
-});
+const normalizeAnalysis = (analysis, payload, keywordSignals) => {
+  const roleTitle = normalizeLine(analysis && analysis.role_title, payload.jobTitle || "Target role");
+  const companyName = normalizeLine(analysis && analysis.company_name, payload.companyName || "Target company");
+  const fitScore = clampScore(analysis && analysis.fit_score);
+  const matchedKeywords = uniqueStrings(
+    [].concat(asArray(analysis && analysis.matched_keywords), asArray(keywordSignals && keywordSignals.matched))
+  ).slice(0, 8);
+  const missingKeywords = mergeKeywordGaps(analysis && analysis.missing_keywords, keywordSignals && keywordSignals.missing);
+  const strengths = normalizeStrengths(analysis && analysis.strengths);
+  const gaps = normalizeGaps(analysis && analysis.gaps);
+  const rewrittenBullets = normalizeBullets(analysis && analysis.rewritten_bullets);
+  const interviewQuestions = normalizeQuestions(analysis && analysis.interview_questions);
+  const prepPlan = normalizePrepPlan(analysis && analysis.prep_plan);
+  const recruiterSnapshot = normalizeSnapshot(analysis && analysis.recruiter_snapshot);
+  const scoreBreakdown = normalizeScoreBreakdown(
+    analysis && analysis.score_breakdown,
+    buildFallbackScoreBreakdown({
+      fitScore,
+      matchedKeywords,
+      missingKeywords,
+      resumeText: payload.resumeText
+    })
+  );
+
+  return {
+    role_title: roleTitle,
+    company_name: companyName,
+    fit_score: fitScore,
+    decision: normalizeLine(
+      analysis && analysis.decision,
+      "Analysis generated successfully, but the provider returned a partial decision summary."
+    ),
+    summary: normalizeLine(
+      analysis && analysis.summary,
+      "The provider returned a partial analysis. Try running it again for a fuller recruiter-style summary."
+    ),
+    candidate_pitch: normalizeLine(
+      analysis && analysis.candidate_pitch,
+      "The provider returned a partial analysis. Try running it again to generate a candidate pitch."
+    ),
+    recruiter_take: normalizeLine(
+      analysis && analysis.recruiter_take,
+      "The provider returned a partial analysis. Try running it again to generate the recruiter takeaway."
+    ),
+    recruiter_snapshot: recruiterSnapshot.length
+      ? recruiterSnapshot
+      : buildFallbackSnapshot({
+          roleTitle,
+          strengths,
+          matchedKeywords,
+          missingKeywords
+        }),
+    score_breakdown: scoreBreakdown,
+    missing_keywords: missingKeywords,
+    matched_keywords: matchedKeywords,
+    strengths,
+    gaps,
+    rewritten_bullets: rewrittenBullets,
+    interview_questions: interviewQuestions,
+    prep_plan: prepPlan
+  };
+};
 
 const validatePayload = ({ resumeText, resumeFile, jobDescription }) => {
   if (!jobDescription) {
@@ -416,6 +564,11 @@ ${bulletCandidates.length ? bulletCandidates.map((item) => `- ${item}`).join("\n
 Instructions:
 - Give a fit score from 0 to 100.
 - Make strengths, gaps, and fixes specific to the evidence in the inputs.
+- recruiter_snapshot must be an array of exactly 3 short, recruiter-facing observations.
+- Each recruiter_snapshot item should be one sentence, concrete, and under 18 words.
+- score_breakdown must be an array of exactly 4 objects with label, score, and rationale.
+- Use these score_breakdown labels exactly: Keyword Match, Relevant Experience, Project Evidence, Communication.
+- Each score_breakdown rationale must stay under 16 words and cite evidence from the supplied inputs.
 - missing_keywords must list 4 to 8 concrete skills, tools, or domain terms from the job description that are weak or absent in the resume.
 - matched_keywords must list 3 to 6 relevant skills or tools that already align well.
 - Rewrite exactly 3 resume bullets or profile bullets. Every rewrite must be genuinely better than the original.
@@ -441,7 +594,9 @@ Instructions:
 - Culture Fit questions should use Value, Example, Result.
 - Generate exactly 7 prep plan steps, one for each day.
 - Return a single JSON object with exactly these top-level keys:
-  role_title, company_name, fit_score, decision, summary, candidate_pitch, recruiter_take, missing_keywords, matched_keywords, strengths, gaps, rewritten_bullets, interview_questions, prep_plan
+  role_title, company_name, fit_score, decision, summary, candidate_pitch, recruiter_take, recruiter_snapshot, score_breakdown, missing_keywords, matched_keywords, strengths, gaps, rewritten_bullets, interview_questions, prep_plan
+- recruiter_snapshot: array of 3 short strings
+- score_breakdown: array of 4 objects with label, score, and rationale
 - strengths: array of 4 objects with title and detail
 - gaps: array of 3 objects with title, detail, and fix
 - rewritten_bullets: array of 3 objects with original, improved, and why_it_works

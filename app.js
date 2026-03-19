@@ -83,6 +83,8 @@ const output = {
   generatedMeta: document.getElementById("generatedMeta"),
   candidatePitch: document.getElementById("candidatePitch"),
   recruiterTake: document.getElementById("recruiterTake"),
+  snapshotList: document.getElementById("snapshotList"),
+  scoreBreakdownList: document.getElementById("scoreBreakdownList"),
   keywordGapList: document.getElementById("keywordGapList"),
   matchedKeywordList: document.getElementById("matchedKeywordList"),
   strengthsList: document.getElementById("strengthsList"),
@@ -159,6 +161,17 @@ const demoSingleResult = {
       "Product-minded early-career engineer with React shipping experience, API validation work, and a full-stack scheduling build that shows growing backend ownership.",
     recruiter_take:
       "The strongest signal is the combination of product execution and release quality. The next improvement is tighter SQL and analytics framing.",
+    recruiter_snapshot: [
+      "Shipped React and QA internship work gives the profile credible production signal.",
+      "ShiftPilot anchors the resume with one concrete full-stack system instead of loose project bullets.",
+      "Best next gain is naming SQL and analytics work more explicitly."
+    ],
+    score_breakdown: [
+      { label: "Keyword Match", score: 76, rationale: "React, debugging, and API work already align well." },
+      { label: "Relevant Experience", score: 86, rationale: "Internships map closely to product-engineering workflow." },
+      { label: "Project Evidence", score: 89, rationale: "ShiftPilot shows auth, data, and workflow ownership." },
+      { label: "Communication", score: 82, rationale: "Tech coaching and cross-functional work read clearly." }
+    ],
     missing_keywords: ["SQL", "patient onboarding", "analytics surfaces", "release quality", "product operations"],
     matched_keywords: ["React", "API integrations", "debugging", "communication"],
     strengths: [
@@ -219,7 +232,18 @@ const demoComparisonResult = {
         fit_score: 79,
         decision: "Strong frontend fit with a lighter analytics story",
         summary: "This version of the profile lands well for a React-heavy frontend role because it emphasizes UI work, design collaboration, and polished shipping habits.",
-        recruiter_take: "The frontend story is already strong. The biggest improvement would be adding one measurable UI or analytics outcome."
+        recruiter_take: "The frontend story is already strong. The biggest improvement would be adding one measurable UI or analytics outcome.",
+        recruiter_snapshot: [
+          "The resume already reads credibly for polished React and dashboard work.",
+          "Design collaboration is a real differentiator, not just a claim.",
+          "The next lift is proving frontend impact with one measurable UI outcome."
+        ],
+        score_breakdown: [
+          { label: "Keyword Match", score: 81, rationale: "React, dashboards, and collaboration language fit cleanly." },
+          { label: "Relevant Experience", score: 80, rationale: "Internship work maps well to frontend shipping." },
+          { label: "Project Evidence", score: 85, rationale: "SignalBoard and ShiftPilot both strengthen the UI story." },
+          { label: "Communication", score: 83, rationale: "Cross-functional and coaching work support team fit." }
+        ]
       },
       meta: demoSingleResult.meta
     },
@@ -233,7 +257,18 @@ const demoComparisonResult = {
         fit_score: 72,
         decision: "Credible but less direct than the product-engineering path",
         summary: "The QA internship gives real signal here, but the broader resume still reads more like a product-engineering candidate than a dedicated automation hire.",
-        recruiter_take: "The fit is real, but the long-term narrative feels more compelling in product-facing engineering roles."
+        recruiter_take: "The fit is real, but the long-term narrative feels more compelling in product-facing engineering roles.",
+        recruiter_snapshot: [
+          "The QA internship gives this path real credibility instead of pure keyword overlap.",
+          "The resume still skews toward product engineering more than dedicated automation.",
+          "Testing wins would land better with one deeper automation or coverage example."
+        ],
+        score_breakdown: [
+          { label: "Keyword Match", score: 74, rationale: "Testing and QA language is present, but not dominant." },
+          { label: "Relevant Experience", score: 75, rationale: "The internship supports the role, but the overall profile is broader." },
+          { label: "Project Evidence", score: 66, rationale: "Projects show systems work more than automation depth." },
+          { label: "Communication", score: 79, rationale: "Documentation and coaching still help the fit." }
+        ]
       },
       meta: demoSingleResult.meta
     }
@@ -373,6 +408,8 @@ const trackEvent = async (event, payload = {}) => {
 const renderSectionViews = (sectionViews = {}) => {
   sectionViewList.replaceChildren();
   const labels = {
+    snapshot: "Snapshot",
+    "score-breakdown": "Score Rationale",
     positioning: "Positioning",
     gaps: "Gaps",
     rewrites: "Rewrites",
@@ -410,7 +447,7 @@ const loadMetrics = async () => {
       completionRate: 51,
       comparisons: 1,
       jobUrlImports: 0,
-      sectionViews: { positioning: 9, gaps: 6, rewrites: 11, questions: 8, prep: 7, compare: 4 }
+      sectionViews: { snapshot: 10, "score-breakdown": 9, positioning: 9, gaps: 6, rewrites: 11, questions: 8, prep: 7, compare: 4 }
     });
     return;
   }
@@ -466,6 +503,59 @@ const renderStackList = (container, items, emptyTitle, emptyText, mode) => {
       card.append(createElement("div", "stack-fix", `Fix: ${item.fix}`));
     }
     container.append(card);
+  });
+};
+
+const renderSnapshot = (items) => {
+  output.snapshotList.replaceChildren();
+  if (!items || !items.length) {
+    const card = createElement("article", "snapshot-item");
+    card.append(createElement("span", "snapshot-index", "01"), createElement("p", "snapshot-copy", "Run an analysis to generate a recruiter-style quick read."));
+    output.snapshotList.append(card);
+    return;
+  }
+
+  items.forEach((item, index) => {
+    const card = createElement("article", "snapshot-item");
+    const indexLabel = createElement("span", "snapshot-index", `0${index + 1}`);
+    const copy = createElement("p", "snapshot-copy", item);
+    card.append(indexLabel, copy);
+    output.snapshotList.append(card);
+  });
+};
+
+const scoreToneClass = (score) => {
+  if (score >= 80) {
+    return "breakdown-strong";
+  }
+  if (score >= 65) {
+    return "breakdown-mid";
+  }
+  return "breakdown-soft";
+};
+
+const renderScoreBreakdown = (items) => {
+  output.scoreBreakdownList.replaceChildren();
+  if (!items || !items.length) {
+    const empty = createElement("article", "breakdown-row");
+    empty.append(createElement("p", "breakdown-rationale", "Run an analysis to see how the score is being weighted."));
+    output.scoreBreakdownList.append(empty);
+    return;
+  }
+
+  items.forEach((item) => {
+    const safeScore = Math.max(0, Math.min(100, Number(item.score) || 0));
+    const row = createElement("article", "breakdown-row");
+    const heading = createElement("div", "breakdown-heading");
+    heading.append(createElement("span", "breakdown-label", item.label), createElement("strong", "breakdown-score", formatPercent(safeScore)));
+
+    const track = createElement("div", "breakdown-bar-track");
+    const fill = createElement("div", `breakdown-bar-fill ${scoreToneClass(safeScore)}`);
+    fill.style.width = `${safeScore}%`;
+    track.append(fill);
+
+    row.append(heading, track, createElement("p", "breakdown-rationale", item.rationale));
+    output.scoreBreakdownList.append(row);
   });
 };
 
@@ -548,6 +638,8 @@ const renderAnalysis = (result) => {
   output.generatedMeta.textContent = formatTimestamp(meta.generatedAt, meta.live);
   output.candidatePitch.textContent = analysis.candidate_pitch;
   output.recruiterTake.textContent = analysis.recruiter_take;
+  renderSnapshot(analysis.recruiter_snapshot || []);
+  renderScoreBreakdown(analysis.score_breakdown || []);
   renderChipList(output.keywordGapList, analysis.missing_keywords || [], "No major keyword gaps were returned for this run.");
   renderChipList(output.matchedKeywordList, analysis.matched_keywords || [], "No aligned keywords were returned for this run.");
   renderStackList(output.strengthsList, analysis.strengths || [], "No strengths returned", "Run another analysis for a fuller strengths breakdown.");
