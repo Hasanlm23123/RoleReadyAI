@@ -1,6 +1,6 @@
-# RoleReady AI
+# NailThatRoleAI
 
-RoleReady AI is a deployed resume-to-interview analysis studio built to feel like a real candidate-support product, not a prompt wrapper.
+NailThatRoleAI is a deployed resume-to-interview analysis studio built to feel like a real candidate-support product, not a prompt wrapper.
 
 ## What It Does
 

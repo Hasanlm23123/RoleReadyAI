@@ -538,7 +538,7 @@ const buildMessages = ({ jobTitle, companyName, focusMode, candidateLevel, resum
     {
       role: "system",
       content:
-        "You are RoleReady AI, a precise recruiting and career analysis assistant. Ground every conclusion in the supplied resume and job description. Do not invent experience, metrics, dates, scope, or technologies. Prefer concrete recruiting language over hype. Return only valid JSON and include every required key."
+        "You are NailThatRoleAI, a precise recruiting and career analysis assistant. Ground every conclusion in the supplied resume and job description. Do not invent experience, metrics, dates, scope, or technologies. Prefer concrete recruiting language over hype. Return only valid JSON and include every required key."
     },
     {
       role: "user",

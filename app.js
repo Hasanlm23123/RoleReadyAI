@@ -1,6 +1,6 @@
 const isGithubPages = window.location.hostname.endsWith("github.io");
 const MAX_UPLOAD_BYTES = 2.5 * 1024 * 1024;
-const HISTORY_KEY = "roleready-history-v2";
+const HISTORY_KEY = "nailthatroleai-history-v1";
 
 const form = document.getElementById("analysisForm");
 const analyzeButton = document.getElementById("analyzeButton");
@@ -1069,7 +1069,7 @@ const exportPdfReport = async () => {
       remainingHeight -= pageHeight - margin * 2;
     }
     const safeRole = (state.currentResult.analysis.role_title || "role").toLowerCase().replace(/[^a-z0-9]+/g, "-");
-    pdf.save(`roleready-report-${safeRole}.pdf`);
+    pdf.save(`nailthatroleai-report-${safeRole}.pdf`);
     await trackEvent("export_pdf");
     setStatus("PDF Exported", "success");
   } finally {
